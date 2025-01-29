@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_currency_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: currency_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    image: fastapi-backend:latest
+    container_name: fastapi-backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    restart: always
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@db:5432/currency_db"
+    command: /entrypoint.sh && uvicorn main:app --host 0.0.0.0 --port 8000
+
+  frontend:
+    image: angular-frontend:latest
+    container_name: angular-frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  postgres_data:

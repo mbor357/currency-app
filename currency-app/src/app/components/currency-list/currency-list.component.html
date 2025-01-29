@@ -1,0 +1,117 @@
+<div class="container mx-auto p-6 bg-gray-50 min-h-screen">
+  <h1 class="text-3xl font-bold text-center mb-6">Lista Walut</h1>
+
+  <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <h2 class="text-2xl font-semibold mb-4">Wybierz okres do pobrania kursów walut</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label for="start-date" class="block text-sm font-medium text-gray-700">Data początkowa:</label>
+        <input
+          type="date"
+          id="start-date"
+          [(ngModel)]="startDate"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+        />
+      </div>
+      <div>
+        <label for="end-date" class="block text-sm font-medium text-gray-700">Data końcowa:</label>
+        <input
+          type="date"
+          id="end-date"
+          [(ngModel)]="endDate"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+        />
+      </div>
+    </div>
+    <div class="flex gap-4 mt-4">
+      <button
+        (click)="fetchAndSaveCurrencies()"
+        class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-600 transition duration-300"
+      >
+        Pobierz Dane
+      </button>
+      <button
+        (click)="showCurrencies()"
+        class="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-green-600 transition duration-300"
+      >
+        Pokaż Dane
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <h2 class="text-2xl font-semibold mb-4">Filtruj</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div>
+        <label for="year" class="block text-sm font-medium text-gray-700">Rok:</label>
+        <input
+          type="number"
+          id="year"
+          [(ngModel)]="selectedYear"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+        />
+      </div>
+      <div>
+        <label for="quarter" class="block text-sm font-medium text-gray-700">Kwartał:</label>
+        <input
+          type="number"
+          id="quarter"
+          [(ngModel)]="selectedQuarter"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+        />
+      </div>
+      <div>
+        <label for="month" class="block text-sm font-medium text-gray-700">Miesiąc:</label>
+        <input
+          type="number"
+          id="month"
+          [(ngModel)]="selectedMonth"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+        />
+      </div>
+      <div>
+        <label for="day" class="block text-sm font-medium text-gray-700">Dzień:</label>
+        <input
+          type="number"
+          id="day"
+          [(ngModel)]="selectedDay"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+        />
+      </div>
+    </div>
+    <button
+      (click)="getCurrencies()"
+      class="mt-4 bg-purple-500 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-purple-600 transition duration-300"
+    >
+      Filtruj
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="text-center my-6 text-lg text-gray-500">Ładowanie...</div>
+
+  <div *ngIf="currencies.length > 0" class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-2xl font-semibold mb-4">Wyniki</h2>
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-100">
+      <tr>
+        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Nazwa waluty</th>
+        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Kod</th>
+        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Kurs</th>
+        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Data</th>
+      </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+      <tr *ngFor="let currency of currencies">
+        <td class="px-6 py-4 text-sm text-gray-700">{{ currency.name }}</td>
+        <td class="px-6 py-4 text-sm text-gray-700">{{ currency.code }}</td>
+        <td class="px-6 py-4 text-sm text-gray-700">{{ currency.rate }}</td>
+        <td class="px-6 py-4 text-sm text-gray-700">{{ currency.date }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="currencies.length === 0 && !loading" class="text-center text-gray-500">
+    Brak danych do wyświetlenia.
+  </div>
+</div>
